@@ -19,7 +19,7 @@ private:
     /*工作线程运行的函数，它不断从工作队列中取出任务并执行之*/
 
     static void* worker(void* arg); /* 设置为静态的，C++的类成员函数都有一个默认参数 this 指针，
-    而线程调用的时候，限制了只能有一个参数 void* arg，如果不设置成静态在调用的时候会出现this 和arg都给worker 导致错误*/ 
+    而线程调用的时候，限制了只能有一个参数 void* arg，如果不设置成静态在调用的时候会出现this 不能转化成 void* arg给worker 导致错误*/ 
     void run();
 
 private:
@@ -62,7 +62,7 @@ threadpool< T >::threadpool(int thread_number, int max_requests) :
     // 创建thread_number 个线程，并将他们设置为脱离线程，自动释放资源
     for ( int i = 0; i < thread_number; i++) {
         printf( "create the %dth thread\n", i);
-        if(pthread_create(m_threads + i, NULL, worker, this ) != 0) { // this 指针传递给worker                                     
+        if(pthread_create(m_threads + i, NULL, worker, this ) != 0) { // 这个模板类的this 指针传递给worker                                     
             delete [] m_threads;                                      // 
             throw std::exception();
         }
